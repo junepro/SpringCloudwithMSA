@@ -44,12 +44,12 @@ public class UserController {
     }
 
     @PostMapping("/users")
-    public ResponseEntity createUser(@RequestBody RequestUser user) {
+    public ResponseEntity<ResponseUser> createUser(@RequestBody RequestUser user) {
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT); //정확히 일치하는 매핑값만 전달
+
         UserDto userDto = mapper.map(user, UserDto.class);
         userService.createUser(userDto);
-
 
         ResponseUser responseUser = mapper.map(userDto, ResponseUser.class);
 

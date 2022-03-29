@@ -16,6 +16,7 @@ import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService{
+
     UserRepository userRepository;
     BCryptPasswordEncoder passwordEncoder;
 
@@ -33,14 +34,13 @@ public class UserServiceImpl implements UserService{
 
         ModelMapper mapper = new ModelMapper();
         mapper.getConfiguration().setMatchingStrategy(MatchingStrategies.STRICT);
-
         UserEntity userEntity = mapper.map(userDto, UserEntity.class);
         userEntity.setEncryptedPwd(passwordEncoder.encode(userDto.getPwd()));
 
         userRepository.save(userEntity);
 
         UserDto returnUserDto = mapper.map(userEntity, UserDto.class);
-        return returnUserDto;
 
+        return returnUserDto;
     }
 }
