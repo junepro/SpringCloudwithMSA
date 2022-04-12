@@ -55,16 +55,15 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
             throw new RuntimeException(e);
         }
     }
-
+//세션과 쿠키는 모바일 어플에서 유효하게 사용할수없슴 (공유 불가)
+//jwt - 자바웹토큰  - 세션 및 쿠키 필요없이 토큰값을 서로 주고받고
     @Override
     protected void successfulAuthentication(HttpServletRequest request,
                                             HttpServletResponse response,
                                             FilterChain chain,
                                             Authentication authResult) throws IOException, ServletException {
-
-        String userName = (((User)authResult.getPrincipal()).getUsername());
+        String userName = ((User)authResult.getPrincipal()).getUsername();
         UserDto userDetails = userService.getUserDetailsByEmail(userName);
-
         String token = Jwts.builder()
                 .setSubject(userDetails.getUserId())
                 .setExpiration(new Date(System.currentTimeMillis() +
