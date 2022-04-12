@@ -20,6 +20,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
     Environment env;
 
     public AuthorizationHeaderFilter(Environment env) {
+        super(Config.class);
         this.env = env;
     }
 
@@ -34,7 +35,7 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             ServerHttpRequest request = exchange.getRequest();
             //헤더값 포함하지 않은경우
             if (!request.getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                return onError(exchange, "no authorization header", HttpStatus.UNAUTHORIZED);
+                return onError(exchange, "No authorization header", HttpStatus.UNAUTHORIZED);
             }
 
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
@@ -57,12 +58,14 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             subject = Jwts.parser().setSigningKey(env.getProperty("token.secret"))
                     .parseClaimsJws(jwt).getBody()
                     .getSubject();
-        } catch (Exception exception) {
-            return returnValue = false;
+        } catch (Exception ex) {
+            returnValue = false;
         }
+
         if (subject == null || subject.isEmpty()) {
-            return returnValue = false;
+            returnValue = false;
         }
+
         return returnValue;
     }
 
