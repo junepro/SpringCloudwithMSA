@@ -20,7 +20,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@RequestMapping("/user-service")
+//@RequestMapping("/user-service") API게이트웨이 에서 루트정보 변경해서 이제 필요업슴
+@RequestMapping("/")
 public class UserController {
     private Environment env;
     private UserService userService;
