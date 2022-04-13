@@ -5,6 +5,7 @@ import com.example.userservice.service.UserService;
 import com.example.userservice.vo.RequestLogin;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.SignatureAlgorithm;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.env.Environment;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -57,22 +58,21 @@ public class AuthenticationFilter extends UsernamePasswordAuthenticationFilter {
     }
 //세션과 쿠키는 모바일 어플에서 유효하게 사용할수없슴 (공유 불가)
 //jwt - 자바웹토큰  - 세션 및 쿠키 필요없이 토큰값을 서로 주고받고
-    @Override
-    protected void successfulAuthentication(HttpServletRequest request,
-                                            HttpServletResponse response,
-                                            FilterChain chain,
-                                            Authentication authResult) throws IOException, ServletException {
-        String userName = ((User)authResult.getPrincipal()).getUsername();
-        UserDto userDetails = userService.getUserDetailsByEmail(userName);
-        String token = Jwts.builder()
-                .setSubject(userDetails.getUserId())
-                .setExpiration(new Date(System.currentTimeMillis() +
-                        Long.parseLong(env.getProperty("token.expiration_time"))))
-                .compact();
+@Override
+protected void successfulAuthentication(HttpServletRequest request,
+                                        HttpServletResponse response,
+                                        FilterChain chain,
+                                        Authentication authResult) throws IOException, ServletException {
+    String userName = ((User)authResult.getPrincipal()).getUsername();
+    UserDto userDetails = userService.getUserDetailsByEmail(userName);
+    String token = Jwts.builder()
+            .setSubject(userDetails.getUserId())
+            .setExpiration(new Date(System.currentTimeMillis() +
+                    Long.parseLong(env.getProperty("token.expiration_time"))))
+            .signWith(SignatureAlgorithm.HS512, env.getProperty("token.secret"))
+            .compact();
 
-        response.addHeader("token", token);
-        response.addHeader("userId", userDetails.getUserId());
-
-
-   }
+    response.addHeader("token", token);
+    response.addHeader("userId", userDetails.getUserId());
+}
 }
