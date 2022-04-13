@@ -30,6 +30,7 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable();
         //http.authorizeHttpRequests().antMatchers("/users/**").permitAll();
+        http.authorizeRequests().antMatchers("/actuator/**").permitAll();
         http.authorizeRequests().antMatchers("/**")
                .hasIpAddress("192.168.51.75")//ip 변경
    //             .access("hasIpAddress('" + "172.27.96.1" + "')")
