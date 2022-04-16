@@ -6,6 +6,9 @@ import com.example.userservice.jpa.UserEntity;
 import com.example.userservice.jpa.UserRepository;
 import com.example.userservice.vo.ResponseOrder;
 import com.netflix.discovery.converters.Auto;
+import feign.Feign;
+import feign.FeignException;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
 import org.modelmapper.spi.MatchingStrategy;
@@ -27,6 +30,7 @@ import java.util.List;
 import java.util.UUID;
 
 @Service
+@Slf4j
 public class UserServiceImpl implements UserService{
 
     UserRepository userRepository;
@@ -85,7 +89,16 @@ public class UserServiceImpl implements UserService{
 //                });
 //        List<ResponseOrder> ordersList = orderListResponse.getBody();
 
-        List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+   //     List<ResponseOrder> ordersList = orderServiceClient.getOrders(userId);
+
+
+        List<ResponseOrder> ordersList = null;
+        try {
+            ordersList = orderServiceClient.getOrders(userId);
+
+        } catch (FeignException exception) {
+            log.error(exception.getMessage());
+        }
 
         userDto.setOrders(ordersList);
 

@@ -38,7 +38,7 @@ greeting:
 
 logging:
   level:
-    com.example.userservice: DEBUG
+    com.example.userservice.client: DEBUG
 
 #token:
 #  expiration_time: 864 #하루만 토큰허용
