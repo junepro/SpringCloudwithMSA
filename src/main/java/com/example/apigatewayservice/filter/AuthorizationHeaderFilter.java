@@ -41,12 +41,17 @@ public class AuthorizationHeaderFilter extends AbstractGatewayFilterFactory<Auth
             String authorizationHeader = request.getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
             String jwt = authorizationHeader.replace("Bearer", "");
 
+            // Create a cookie object
+//            ServerHttpResponse response = exchange.getResponse();
+//            ResponseCookie c1 = ResponseCookie.from("my_token", "test1234").maxAge(60 * 60 * 24).build();
+//            response.addCookie(c1);
+
             if (!isJwtValid(jwt)) {
                 return onError(exchange, "JWT token is not valid", HttpStatus.UNAUTHORIZED);
             }
 
             return chain.filter(exchange);
-            };
+        };
     }
 
     private boolean isJwtValid(String jwt) {

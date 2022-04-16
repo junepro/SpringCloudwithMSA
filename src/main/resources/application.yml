@@ -54,7 +54,7 @@ spring:
           filters:
             - RemoveRequestHeader=Cookie
             - RewritePath=/user-service/(?<segment>.*), /$\{segment}
-            - AuthorizationHeaderFilter
+           # - AuthorizationHeaderFilter
         - id: user-service
           uri: lb://USER-SERVICE
           predicates:
@@ -95,8 +95,8 @@ spring:
 #            - AddResponseHeader=second-request, second-response-header2
 
 
-token:
-  secret: user_token
+#token:
+#  secret: user_token
 
 management:
   endpoints:
