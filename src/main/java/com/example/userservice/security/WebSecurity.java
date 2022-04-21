@@ -31,11 +31,11 @@ public class WebSecurity extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
         //http.authorizeHttpRequests().antMatchers("/users/**").permitAll();
         http.authorizeRequests().antMatchers("/actuator/**").permitAll();
-        http.authorizeRequests().antMatchers("/**")
-               .hasIpAddress("192.168.51.9")//ip 변경
-   //             .access("hasIpAddress('" + "172.27.96.1" + "')")
-               .and()
-               .addFilter(getAuthenticationFilter()); //필터 통과한경우에만
+        http.authorizeRequests().antMatchers("/**").permitAll();
+//               .hasIpAddress("192.168.0.7")//ip 변경
+//   //             .access("hasIpAddress('" + "172.27.96.1" + "')")
+//               .and()
+//               .addFilter(getAuthenticationFilter()); //필터 통과한경우에만
         http.headers().frameOptions().disable();
     }
 
